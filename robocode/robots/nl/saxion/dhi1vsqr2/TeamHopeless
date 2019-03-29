@@ -1,0 +1,7 @@
+#Robocode Robot Team
+#Thu Mar 28 10:59:51 CET 2019
+team.author.name=
+team.version=1.0
+team.members=nl.saxion.dhi1vsqr2.ProjectLeader*,nl.saxion.dhi1vsqr2.Slave*,nl.saxion.dhi1vsqr2.Slave*,nl.saxion.dhi1vsqr2.Slave*
+team.description=Team\:\nHopeless\nBecause we're programming in Java
+robocode.version=1.9.3.0
