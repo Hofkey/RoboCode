@@ -1,13 +1,9 @@
 package nl.saxion.dhi1vsqr2;
 
-import java.awt.Color;
 import java.awt.geom.Point2D;
-import java.io.IOException;
 
 import robocode.*;
 import robocode.util.Utils;
-import nl.saxion.dhi1vsqr2.Point;
-import nl.saxion.dhi1vsqr2.RobotColors;
 
 import static robocode.util.Utils.normalRelativeAngleDegrees;
 
@@ -35,18 +31,13 @@ public class Slave extends TeamRobot {
     }
 
     public void onMessageReceived(MessageEvent e) {
-        // Fire at a point
         if (e.getMessage() instanceof Point) {
             Point p = (Point) e.getMessage();
-            // Calculate x and y to target
             double dx = p.getX() - this.getX();
             double dy = p.getY() - this.getY();
-            // Calculate angle to target
             double theta = Math.toDegrees(Math.atan2(dx, dy));
 
-            // Turn gun to target
             turnGunRight(normalRelativeAngleDegrees(theta - getGunHeading()));
-            // Fire hard!
             fire(3);
         } // Set our colors
         else if (e.getMessage() instanceof RobotColors) {
