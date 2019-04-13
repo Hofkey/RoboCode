@@ -71,10 +71,9 @@ public class ProjectLeader extends TeamRobot {
             // Calculate enemy's position
             double enemyX = getX() + e.getDistance() * Math.sin(Math.toRadians(enemyBearing));
             double enemyY = getY() + e.getDistance() * Math.cos(Math.toRadians(enemyBearing));
-
             try {
                 // Send enemy position to teammates
-                broadcastMessage(e);
+                broadcastMessage(new Point(enemyX, enemyY));
             } catch (IOException ex) {
                 out.println("Unable to send order: ");
                 ex.printStackTrace(out);
@@ -85,43 +84,11 @@ public class ProjectLeader extends TeamRobot {
     }
 
     private void fireAtBot(ScannedRobotEvent e) {
-        double absBearing=e.getBearingRadians()+getHeadingRadians();
-
-        double turn=absBearing+Math.PI/2;
-
-        turn-=Math.max(0.5,(1/e.getDistance())*100)*dir;
-
-        setTurnRightRadians(Utils.normalRelativeAngle(turn-getHeadingRadians()));
-
-        setMaxVelocity(400/getTurnRemaining());
-
-        setAhead(100*dir);
-
-        double enemyHeading = e.getHeadingRadians();
-        double enemyHeadingChange = enemyHeading - oldEnemyHeading;
-        oldEnemyHeading = enemyHeading;
-
-        double deltaTime = 0;
-        double predictedX = getX()+e.getDistance()*Math.sin(absBearing);
-        double predictedY = getY()+e.getDistance()*Math.cos(absBearing);
-        while((++deltaTime) * BULLET_SPEED <  Point2D.Double.distance(getX(), getY(), predictedX, predictedY)){
-
-            predictedX += Math.sin(enemyHeading) * e.getVelocity();
-            predictedY += Math.cos(enemyHeading) * e.getVelocity();
-
-            enemyHeading += enemyHeadingChange;
-
-            predictedX=Math.max(Math.min(predictedX,getBattleFieldWidth()-18),18);
-            predictedY=Math.max(Math.min(predictedY,getBattleFieldHeight()-18),18);
-
+        turnGunRight(e.getBearing());
+        fire(3);
+        if(e.getDistance() < 50) {
+            fire(.5);
         }
-
-        double aim = Utils.normalAbsoluteAngle(Math.atan2(  predictedX - getX(), predictedY - getY()));
-
-        setTurnGunRightRadians(Utils.normalRelativeAngle(aim - getGunHeadingRadians()));
-        setFire(BULLET_POWER);
-
-        setTurnRadarRightRadians(Utils.normalRelativeAngle(absBearing-getRadarHeadingRadians())*2);
     }
 
     /**
